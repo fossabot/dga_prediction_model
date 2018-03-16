@@ -1,29 +1,42 @@
 """
-Downloads Cisco Umbrella Popularity List (legit), DGA-domains (results popular dga)
+Downloads Cisco Umbrella Popularity List (legit), DGA-domains (results popular DGA)
 and extract second-level domain.
 """
 from io import BytesIO
 from zipfile import ZipFile
 from urllib.request import urlopen
 import os
-import tldextract
+import pandas as pd
 
 
-def get_legit():
-    if not os.path.isfile('../input data/top-1m.csv'):
+def get_data():
+    if not os.path.isfile('input data/top-1m.csv'):
         resp = urlopen('http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip')
         zipfile = ZipFile(BytesIO(resp.read()))
-        zipfile.extractall("../input data")
-    else:
-        raw = open('../input data/top-1m.csv')
-        for line in raw:
-            return tldextract.extract(line.split(',')[1]).domain
+        zipfile.extractall("input data")
+
+    if not os.path.isfile('input data/dga.csv'):
+        print("No DGA training data. Check out integrity of input files ")
 
 
-def get_dga():
-    if not os.path.isfile('../input data/dga.csv'):
-        print("No dga training data.")
-    else:
-        raw = open('../input data/dga.csv')
-        for line in raw:
-            return tldextract.extract(line).domain
+def format_data():
+    training_data = {'legit': [], 'dga': []}
+
+    """ Reduction to a unified form """
+    for _ in training_data.items():
+        domain_list = pd.read_csv('input data/top-1m.csv', names=['domain'])
+        domain_list['domain'] = domain_list.applymap(lambda x: x.split('.')[0].strip().lower())
+        domain_list['type'] = 'legit'
+        training_data['legit'] = domain_list
+
+        domain_list = pd.read_csv('input data/dga.csv', names=['domain'])
+        domain_list['domain'] = domain_list.applymap(lambda x: x.split('.')[0].strip().lower())
+        domain_list['type'] = 'dga'
+        training_data['dga'] = domain_list
+
+    return training_data
+
+
+if __name__ == "__main__":
+    get_data()
+    format_data()
