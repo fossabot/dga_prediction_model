@@ -11,15 +11,15 @@ chmod +x install.sh
 install.sh
 ```
 
+
 Usage
 -
-##### Launch the initialization.py script.
+##### Launch the initialization.py script. Then follow the prompts in MENU to choose point to execute.
 ```
 python3 initializer.py
 ```
-##### Then follow the prompts in MENU to choose point to execute.
+
 
 DGA-domains
 -
-##### Repo contain file with the results of popular DGA (original file from the [repo](https://github.com/andrewaeva/DGA)).
-##### Kept the same [GNU General Public license v2](http://opensource.org/licenses/gpl-2.0.php) (copyleft).
+##### Repo contain file with the results of popular DGA (original file from the [repo](https://github.com/andrewaeva/DGA)). Kept the same [GNU General Public license v2](http://opensource.org/licenses/gpl-2.0.php) (copyleft).
