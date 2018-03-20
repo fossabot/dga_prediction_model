@@ -51,12 +51,10 @@ def main():
             input("Press Enter to continue...")
 
         elif choice == "3":
-            print("Testing")
+            print("Starting capture network traffic")
+            input("Press Enter to continue...")
 
         elif choice == "4":
-            print("Starting capture network traffic")
-
-        elif choice == "5":
             print("Exiting")
             loop = False
         else:
