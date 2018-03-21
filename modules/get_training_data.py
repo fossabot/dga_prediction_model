@@ -15,13 +15,9 @@ def get_data():
         resp = urlopen('http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip')
         zipfile = ZipFile(BytesIO(resp.read()))
         zipfile.extractall("input data")
-    # Checking for a file with the results of popular DGA.
-    if not os.path.isfile('input data/dga.csv'):
-        print("No DGA training data. Check out integrity of input files ")
 
 
 def format_data():
-
     # Reduction to a unified form (extract second-level domain).
     for _ in training_data.items():
         domain_list = pd.read_csv('input data/top-1m.csv', names=['domain'])

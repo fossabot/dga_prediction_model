@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 sudo apt update -y && apt upgrade -y
-sudo apt install python3, python3-pip -y
-pip3 install -r requirements.txt
+sudo apt install python3 -y
+sudo apt install python3-pip -y

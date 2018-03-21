@@ -1,7 +1,11 @@
+import os
+
 import config
 from modules.get_training_data import get_data
 from modules.get_training_data import format_data
-from modules.training_model import train_model
+from modules.train_model import train
+from modules.capture_domain import capture
+from scapy import arch
 
 
 # Interactive command-line menu
@@ -10,9 +14,8 @@ def print_menu():
     print("""
     1. Get training data
     2. Train model
-    3. Testing
-    4. Start capture network traffic
-    5. Exit
+    3. Start capture network traffic
+    4. Exit
     """)
     print(67 * "-")
 
@@ -20,9 +23,9 @@ def print_menu():
 def remark():
     print("""
     Remark:
-    If you are setting up algorithm for the first time, follow the steps 1-4.
-    When you restart, you can use the fourth step without initializing the 
-    learning process again.
+    If you are setting up algorithm for the first time,  follow 
+    the steps 1-3. When you restart, you can use the third step 
+    without initializing the learning process again.
     """)
     print(67 * "-")
 
@@ -36,29 +39,33 @@ def main():
         if remark_count == 1:
             remark()
             remark_count -= 1
-        choice = input("Enter your choice [1-5]: ")
+        choice = input("Enter your choice [1-4]: ")
         print(67 * "-")
         if choice == "1":
-            print("Getting training data...")
+            print("[*] Getting training data...")
             get_data()
-            print("Reduction to a unified form...")
+            print("[*] Reduction to a unified form...")
             format_data()
             input("Press Enter to continue...")
 
         elif choice == "2":
-            print("Training model... (it may take a few minutes)")
-            train_model()
+            print("[*] Training model... (it may take a few minutes)")
+            train()
             input("Press Enter to continue...")
 
         elif choice == "3":
-            print("Starting capture network traffic")
+            if os.path.isfile('input data/model.pkl'):
+                print("[*] Starting capture network traffic.")
+                capture()
+            else:
+                print("You must run the training algoirthm first.")
             input("Press Enter to continue...")
 
         elif choice == "4":
-            print("Exiting")
+            print("[*] Exiting")
             loop = False
         else:
-            print("Wrong option selection. Enter any key to try again..")
+            print("Wrong option selection. Enter any key to try again.")
 
 
 if __name__ == "__main__":

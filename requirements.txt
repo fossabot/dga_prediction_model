@@ -1,5 +1,7 @@
+tldextract
 matplotlib
 pandas
 scikit-learn
 numpy
 scipy
+scapy-python3

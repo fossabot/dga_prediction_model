@@ -8,7 +8,7 @@ git clone https://github.com/exctzo/dga_prediction_model.git && cd dga_predictio
 ##### Execute the install.sh
 ```
 chmod +x install.sh
-install.sh
+./install.sh
 ```
 
 

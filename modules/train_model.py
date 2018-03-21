@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 # from sklearn.metrics import classification_report
 from sklearn.externals import joblib
 # from matplotlib import pyplot as plt
+# from sklearn.model_selection import cross_val_score
 
 import pandas as pd
 import numpy as np
@@ -17,7 +18,7 @@ import numpy as np
 from config import training_data
 
 
-def train_model():
+def train():
     np.seterr(divide='ignore', invalid='ignore')
     # Overall training data.
     all_data_dict = pd.concat([training_data['legit'], training_data['dga']], ignore_index=True)
@@ -63,6 +64,9 @@ def train_model():
     # Fit a model.
     clf = RandomForestClassifier(n_estimators=10)
     clf = clf.fit(X_train, y_train)
+
+    # scores = cross_val_score(clf, X_test, y_test)
+    # print(scores.mean())
 
     # Save model
     joblib.dump(clf, 'input data/model.pkl')
@@ -128,4 +132,4 @@ def train_model():
 
 
 if __name__ == "__main__":
-    train_model()
+    train()
