@@ -1,11 +1,11 @@
 import os
 
-import config
+
 from modules.get_training_data import get_data
 from modules.get_training_data import format_data
 from modules.train_model import train
 from modules.capture_domain import capture
-from scapy import arch
+import sys
 
 
 # Interactive command-line menu
@@ -33,39 +33,39 @@ def remark():
 def main():
     loop = True
     remark_count = 1
+    try:
+        while loop:
+            print_menu()
+            if remark_count == 1:
+                remark()
+                remark_count -= 1
+            choice = input("Enter your choice [1-4]: ")
+            print(67 * "-")
+            if choice == "1":
+                get_data()
 
-    while loop:
-        print_menu()
-        if remark_count == 1:
-            remark()
-            remark_count -= 1
-        choice = input("Enter your choice [1-4]: ")
-        print(67 * "-")
-        if choice == "1":
-            print("[*] Getting training data...")
-            get_data()
-            print("[*] Reduction to a unified form...")
-            format_data()
-            input("Press Enter to continue...")
+                format_data()
+                input("Press Enter to continue...")
 
-        elif choice == "2":
-            print("[*] Training model... (it may take a few minutes)")
-            train()
-            input("Press Enter to continue...")
+            elif choice == "2":
+                train()
+                input("Press Enter to continue...")
 
-        elif choice == "3":
-            if os.path.isfile('input data/model.pkl'):
-                print("[*] Starting capture network traffic.")
-                capture()
+            elif choice == "3":
+                if os.path.isfile('input data/model.pkl'):
+                    capture()
+                else:
+                    print("You must run the training algoirthm first.")
+                input("Press Enter to continue...")
+
+            elif choice == "4":
+                print("[*] Exiting...")
+                loop = False
             else:
-                print("You must run the training algoirthm first.")
-            input("Press Enter to continue...")
-
-        elif choice == "4":
-            print("[*] Exiting")
-            loop = False
-        else:
-            print("Wrong option selection. Enter any key to try again.")
+                print("Wrong option selection. Enter any key to try again.")
+    except KeyboardInterrupt:
+        print("\n[*] Exiting...")
+        sys.exit(0)
 
 
 if __name__ == "__main__":

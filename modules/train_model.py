@@ -10,35 +10,33 @@ from sklearn.model_selection import train_test_split
 # from sklearn.metrics import classification_report
 from sklearn.externals import joblib
 # from matplotlib import pyplot as plt
-# from sklearn.model_selection import cross_val_score
-
 import pandas as pd
 import numpy as np
-
-from config import training_data
+import pickle
 
 
 def train():
-    np.seterr(divide='ignore', invalid='ignore')
+
+    print("[*] Loading training dataset from disk...")
+    with open('input data/training_data.pkl', 'rb') as f:
+        training_data = pickle.load(f)
+
     # Overall training data.
     all_data_dict = pd.concat([training_data['legit'], training_data['dga']], ignore_index=True)
 
-    # Calculate length for each domain.
+    print("[*] Calculating length for each domain...")
     # Domains of any type (legit, dga) with length <6 receive very close results in the rating.
     # Also usually DGA domains have length > 6.
     # Based on this, they will not be taken into account in the model.
     all_data_dict['length'] = [len(x) for x in all_data_dict['domain']]
     all_data_dict = all_data_dict[all_data_dict['length'] > 6]
 
-    # Calculate entropy for each domain.
-    # all_data_dict['entropy'] = [entropy(x) for x in all_data_dict['domain']]
-
-    # Create model to definite matrix of ngram counts.
+    print("[*] Creating model to definite matrix of ngram counts...")
     # Min frequency = 0.001% for domains in overall data.
     # Remark: for 0.01% appears a lot zero values on occurrence ngram.
     vectorizer = CountVectorizer(ngram_range=(3, 5), analyzer='char', max_df=1.0, min_df=0.0001)
 
-    # Tokenize and count the ngram occurrences of legit domains.
+    print("[*] Tokenizing and counting the ngram occurrences of legit domains...")
     # Result of sparse matrix (most of the entries are zero).
     # "(x,y) n" mean that "(row, column) value".
     # Value - the number of times a ngram appeared in the domains
@@ -62,13 +60,11 @@ def train():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.99, random_state=0)
 
     # Fit a model.
+    print("[*] Training model...")
     clf = RandomForestClassifier(n_estimators=10)
     clf = clf.fit(X_train, y_train)
 
-    # scores = cross_val_score(clf, X_test, y_test)
-    # print(scores.mean())
-
-    # Save model
+    print("[*] Saving model to disk...")
     joblib.dump(clf, 'input data/model.pkl')
 
     # # Test for the effective selection of the number of trees
