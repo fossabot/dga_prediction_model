@@ -1,29 +1,41 @@
 """
 Starting capture network traffic
 """
-# import sys
-# import os
-# from datetime import datetime
-
-# from scapy.layers.dns import DNS
-# from scapy.layers.inet import IP
+import pickle
+import tldextract
 from sklearn.externals import joblib
 from sklearn.feature_extraction.text import CountVectorizer
-# from config import training_data
-import pickle
-# import tldextract
-# from scapy.all import *
-# from scapy import packet
-# from scapy.sendrecv import sniff
+from scapy.all import *
+from scapy.layers.dns import DNS
+from scapy.layers.inet import IP
 
 
-# def sniff_packets(packet):
-#     if IP in packet:
-#         pckt_src = packet[IP].src
-#         pckt_dst = packet[IP].dst
+# import logging
+# logging.basicConfig(filename='example.log',level=logging.DEBUG)
+# logging.getLogger("scapy").setLevel(1)
+
+# ADD FUNCTION - DONT REPEAT THE SAME DOMAIN + logging to file
+
+def packet_callback(packet):
+    if IP in packet:
+        ip_src = packet[IP].src
+        ip_dst = packet[IP].dst
+        if packet.haslayer(DNS) and packet.getlayer(DNS).qr == 0:
+            qname = packet.getlayer(DNS).qd.qname.decode("utf-8")
+            ext_qname = tldextract.extract(qname)
+            if ext_qname.suffix != '' and ext_qname.suffix != 'localdomain' and len(ext_qname.domain) > 6:
+                match = ngram_counts * vectorizer.transform([ext_qname.domain]).transpose()
+                X_pred = [len(ext_qname.domain), match]
+                if clf.predict([X_pred]) == 'dga':
+                    print(str(ip_src.encode("utf-8")) + ' --> ' + str(ip_dst.encode("utf-8")) + ' : ' + '('
+                          + qname + ')')
 
 
 def capture():
+
+    global ngram_counts
+    global vectorizer
+    global clf
 
     print("[*] Loading training dataset from disk...")
     with open('input data/training_data.pkl', 'rb') as f:
@@ -37,25 +49,19 @@ def capture():
     ngram_matrix = vectorizer.fit_transform(training_data['legit']['domain'])
     ngram_counts = ngram_matrix.sum(axis=0).getA1()
 
-    domain = 'otqobfxqpyfxo'
-    match = ngram_counts * vectorizer.transform([domain]).transpose()
-    X_pred = [len(domain), match]
-    print(domain, clf.predict([X_pred]))
+    print("List system interfaces: ", os.listdir('/sys/class/net/'))
+    interface = input("Enter desired interface: ")
 
-    # print("List system interfaces: ", os.listdir('/sys/class/net/'))
-    # interface = input("Enter desired interface: ")
+    print("[*] Scanning...")
 
-    # start_time = datetime.now()
+    start_time = datetime.now()
 
-    # print("[*] Scanning...")
+    sniff(iface=interface, filter="port 53", store=0, prn=packet_callback)
 
-    # sniff(iface=interface, filter="udp and port 53", store=0, prn=sniff_packets)
-
-    # stop_time = datetime.now()
-    # total_time = stop_time - start_time
-
-    # print("[*] Scan stopped")
-    # print("Scan duration: %s" %(total_time))
+    stop_time = datetime.now()
+    total_time = stop_time - start_time
+    print("[*] Scan stopped")
+    print("Scan duration: %s" % (total_time))
 
 
 if __name__ == "__main__":

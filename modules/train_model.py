@@ -36,7 +36,7 @@ def train():
     # Remark: for 0.01% appears a lot zero values on occurrence ngram.
     vectorizer = CountVectorizer(ngram_range=(3, 5), analyzer='char', max_df=1.0, min_df=0.0001)
 
-    print("[*] Tokenizing and counting the ngram occurrences of legit domains...")
+    print("[*] Counting the ngram occurrences of legit domains...")
     # Result of sparse matrix (most of the entries are zero).
     # "(x,y) n" mean that "(row, column) value".
     # Value - the number of times a ngram appeared in the domains
@@ -57,7 +57,7 @@ def train():
     y = np.array(all_data_dict['type'].tolist())
 
     # For the test, 20% of the original data is allocated.
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.99, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
     # Fit a model.
     print("[*] Training model...")

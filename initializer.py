@@ -45,24 +45,24 @@ def main():
                 get_data()
 
                 format_data()
-                input("Press Enter to continue...")
+                input("\nPress Enter to continue.")
 
             elif choice == "2":
                 train()
-                input("Press Enter to continue...")
+                input("\nPress Enter to continue.")
 
             elif choice == "3":
                 if os.path.isfile('input data/model.pkl'):
                     capture()
                 else:
-                    print("You must run the training algoirthm first.")
-                input("Press Enter to continue...")
+                    print("\nYou must run the training algoirthm first.")
+                input("\nPress Enter to continue.")
 
             elif choice == "4":
                 print("[*] Exiting...")
                 loop = False
             else:
-                print("Wrong option selection. Enter any key to try again.")
+                print("\nWrong option selection. Enter any key to try again.")
     except KeyboardInterrupt:
         print("\n[*] Exiting...")
         sys.exit(0)
