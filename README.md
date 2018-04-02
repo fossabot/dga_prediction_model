@@ -22,4 +22,4 @@ python3 initializer.py
 
 DGA-domains
 -
-##### Repo contain file with the results of popular DGA (original file from the [repo](https://github.com/andrewaeva/DGA)). Kept the same [GNU General Public license v2](http://opensource.org/licenses/gpl-2.0.php) (copyleft).
+##### Repo contain file with the results of popular DGA (original file from the [repo](https://github.com/andrewaeva/DGA)). Kept the same [GNU General Public license v2](http://opensource.org/licenses/gpl-2.0.php).
