@@ -6,7 +6,6 @@ from io import BytesIO
 import pandas as pd
 from zipfile import ZipFile
 from urllib.request import urlopen
-# from config import training_data
 import pickle
 
 
