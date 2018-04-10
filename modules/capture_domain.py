@@ -19,7 +19,7 @@ def packet_callback(packet):
         if packet.haslayer(DNS) and packet.getlayer(DNS).qr == 0:
             qname = packet.getlayer(DNS).qd.qname.decode("utf-8")
             ext_qname = tldextract.extract(qname)
-            if len(ext_qname.domain) > 6 and ext_qname.domain != pre_domain:
+            if len(ext_qname.domain) > 6 and "-" not in ext_qname.domain and ext_qname.domain != pre_domain:
                 match = ngram_counts * vectorizer.transform([ext_qname.domain]).transpose()
                 X_pred = [len(ext_qname.domain), match]
                 pre_domain = ext_qname.domain
