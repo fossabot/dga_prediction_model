@@ -21,10 +21,7 @@ import numpy as np
 import pickle
 
 
-
-
 def train():
-
     print("[*] Loading training dataset from disk...")
     with open('input data/training_data.pkl', 'rb') as f:
         training_data = pickle.load(f)
@@ -104,7 +101,7 @@ def train():
     # plt.ylabel('True label')
     # plt.xlabel('Predicted label')
     # plt.show()
-    
+
     # # Manhattan
     # h = .02  # step size in the mesh
     #

@@ -4,6 +4,7 @@ Starting capture network traffic
 import logging
 import pickle
 import tldextract
+import iptc
 from sklearn.externals import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 from scapy.all import *
@@ -26,6 +27,12 @@ def packet_callback(packet):
                 if clf.predict([X_pred]) == 'dga':
                     print(str(ip_src.encode("utf-8")) + ' --> ' + str(ip_dst.encode("utf-8")) + ' : ' + qname)
                     logger.info(str(ip_src.encode("utf-8")) + ' --> ' + str(ip_dst.encode("utf-8")) + ' : ' + qname)
+                    # Check if ip source already exists
+                    if ip_src in dga_hosts:
+                        dga_hosts[ip_src] = dga_hosts[ip_src] + 1
+                    # Add ip source to list and set value to 1
+                    else:
+                        dga_hosts[ip_src] = 1
 
 
 def capture():
@@ -34,6 +41,7 @@ def capture():
     global clf
     global pre_domain
     global logger
+    global dga_hosts
 
     print("[*] Loading training dataset from disk...")
     with open('input data/training_data.pkl', 'rb') as f:
@@ -51,6 +59,9 @@ def capture():
     # Definition previous domain so that the domains not repeat in output console
     # Inasmuch as dns-server generate many additional packets during his work
     pre_domain = None
+
+    # Collect counts dga query occurrences for separate hosts
+    dga_hosts = {}
 
     print("List system interfaces: ", os.listdir('/sys/class/net/'))
     interface = input("Enter desired interface: ")
@@ -79,6 +90,24 @@ def capture():
     print("[*] Scan stopped")
     print("Scan duration: %s" % (total_time))
     logger.info("Scan duration: %s" % (total_time))
+
+    # Block dangerous hosts, add rule in iptables
+    # Remove possibly not dangerous hosts (occur < 10)
+    # dga_hosts = {key: val for key, val in dga_hosts.items() if val >= 10}
+    answer = input("You want block possibly dangerous hosts. Enter yes or no: ")
+    if answer == "yes":
+        for key, val in dga_hosts.items():
+            if val >= 10:
+                print('Blocking host with ip address: ', key)
+                rule = iptc.Rule()
+                match = iptc.Match(rule, "ip")
+                match.src = key + "/255.255.255.0"
+                rule.add_match(match)
+                rule.target = iptc.Target(rule, "DROP")
+                chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
+                chain.insert_rule(rule)
+    elif answer == "No":
+        print("Skipping blocking...")
 
 
 if __name__ == "__main__":
