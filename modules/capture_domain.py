@@ -93,7 +93,6 @@ def capture():
 
     # Block dangerous hosts, add rule in iptables
     # Remove possibly not dangerous hosts (occur < 10)
-    # dga_hosts = {key: val for key, val in dga_hosts.items() if val >= 10}
     answer = input("You want block possibly dangerous hosts. Enter yes or no: ")
     if answer == "yes":
         for key, val in dga_hosts.items():

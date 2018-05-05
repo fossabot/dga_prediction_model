@@ -1,14 +1,16 @@
 # DGA Prediction Model
+#### Prediction Model based on frequency analysis of ngrams with machine learning (used Random Forest). The algorithm is able to detect dga-domains in the general active flow of dns-requests. Also, if necessary, can block suspicious hosts by filtering their packets.
+
 Installation
 -
 ##### Clone the DGA Prediction Model repository and enter the directory.
 ``` 
-git clone https://github.com/exctzo/dga_prediction_model.git && cd dga_prediction_model
+$ git clone https://github.com/exctzo/dga_prediction_model.git && cd dga_prediction_model
 ```
 ##### Execute the install.sh
 ```
-chmod +x install.sh
-./install.sh
+$ chmod +x install.sh
+$ ./install.sh
 ```
 
 
@@ -16,7 +18,7 @@ Usage
 -
 ##### Launch the initialization.py script. Then follow the prompts in MENU to choose point to execute.
 ```
-python3 initializer.py
+$ python3 initializer.py
 ```
 
 
