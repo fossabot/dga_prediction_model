@@ -82,6 +82,8 @@ def capture():
     # For work time duration
     start_time = datetime.now()
 
+    logger.info("Detected requests contain possibly dga-domains:")
+
     # Main process, scanning network
     sniff(iface=interface, filter="port 53", store=0, prn=packet_callback)
 
@@ -91,19 +93,19 @@ def capture():
     print("Scan duration: %s" % (total_time))
     logger.info("Scan duration: %s" % (total_time))
 
-    # Block dangerous hosts, add rule in iptables
-    # Remove possibly not dangerous hosts (occur < 10)
-    answer = input("You want block possibly dangerous hosts. Enter yes or no: ")
+    # Block dangerous hosts, add rule in iptables (for current session)
+    # Ignore possibly not dangerous hosts (occur < 10)
+    answer = input("You want block possibly dangerous hosts? Enter yes or no: ")
     if answer == "yes":
+        logger.info("Blocked hosts:")
         for key, val in dga_hosts.items():
             if val >= 10:
-                print('Blocking host with ip address: ', key)
-                rule = iptc.Rule()
-                match = iptc.Match(rule, "ip")
-                match.src = key + "/255.255.255.0"
-                rule.add_match(match)
-                rule.target = iptc.Target(rule, "DROP")
+                print("Blocking host with ip address: %s" % key)
+                logger.info("IP address: %s" % key)
                 chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
+                rule = iptc.Rule()
+                rule.src = key + "/255.255.255.0"
+                rule.target = iptc.Target(rule, "DROP")
                 chain.insert_rule(rule)
     elif answer == "No":
         print("Skipping blocking...")
