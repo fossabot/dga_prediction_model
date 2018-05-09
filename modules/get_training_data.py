@@ -4,9 +4,9 @@ Getting input data for model
 import os
 from io import BytesIO
 import pandas as pd
+import pickle
 from zipfile import ZipFile
 from urllib.request import urlopen
-import pickle
 
 
 def get_data():

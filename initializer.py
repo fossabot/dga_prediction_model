@@ -1,11 +1,12 @@
+"""
+MENU
+"""
 import os
-
-
+import sys
 from modules.get_training_data import get_data
 from modules.get_training_data import format_data
 from modules.train_model import train
 from modules.capture_domain import capture
-import sys
 
 
 # Interactive command-line menu
