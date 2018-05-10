@@ -1,5 +1,5 @@
 """
-Starting capture network traffic
+Starting capture network traffic and blocking hosts
 """
 import logging
 import pickle

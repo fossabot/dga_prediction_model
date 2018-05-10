@@ -21,6 +21,18 @@ Usage
 $ python3 initializer.py
 ```
 
+#### In addition:
+##### Blocking of possible dangerous hosts occurs by adding rules to iptables tables. The host can be blocked after the value of the dga-requests sent to server becomes more than 10 during scan traffic.
+##### To view iptables rules:
+```
+$ iptables -L
+```
+##### The rules apply to the current server session, after the reboot the tables are cleared.
+##### To immediately delete the rule, use the command:
+```
+$ iptables -D INPUT -s ip_host_address -j DROP
+```
+
 
 DGA-domains
 -
