@@ -1,4 +1,6 @@
 # DGA Prediction Model
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fexctzo%2Fdga_prediction_model.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fexctzo%2Fdga_prediction_model?ref=badge_shield)
+
 #### Prediction Model based on frequency analysis of ngrams with machine learning (used Random Forest). The algorithm is able to detect dga-domains in the general active flow of dns-requests. Also, if necessary, can block suspicious hosts by filtering their packets.
 
 Installation
@@ -37,3 +39,5 @@ $ iptables -D INPUT -s ip_host_address -j DROP
 DGA-domains
 -
 ##### Repo contain file with the results of popular DGA (original file from the [repo](https://github.com/andrewaeva/DGA)). Kept the same [GNU General Public license v2](http://opensource.org/licenses/gpl-2.0.php).
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fexctzo%2Fdga_prediction_model.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fexctzo%2Fdga_prediction_model?ref=badge_large)
